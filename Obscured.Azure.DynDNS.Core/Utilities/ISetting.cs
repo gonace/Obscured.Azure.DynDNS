@@ -10,5 +10,6 @@
         string SubscriptionId { get; set; }
         string Provider { get; set; }
         int PoolingInterval { get; set; }
+        string ZoneName { get; set; }
     }
 }

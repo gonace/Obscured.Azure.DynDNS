@@ -69,41 +69,5 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
                 throw e.InnerException;
             }
         }
-
-        //public AuthenticationResult GetAuthResult(string tenantId, bool alwaysPrompt, string userId)
-        //{
-        //    var context = new AuthenticationContext(string.Format("https://login.windows.net/{0}", tenantId));
-
-        //    Task<AuthenticationResult> acquireTokenTask;
-        //    if (!string.IsNullOrEmpty(userId))
-        //    {
-        //        acquireTokenTask = context.AcquireTokenAsync(
-        //            resource: "https://management.core.windows.net/",
-        //            clientId: _settings.ClientId,
-        //            userCredential: new UserCredential(userId, "MacB00k86!"));
-        //            //redirectUri: new Uri("urn:ietf:wg:oauth:2.0:oob"),
-        //            //arameters: new PlatformParameters(promptBehavior: alwaysPrompt ? PromptBehavior.Always : PromptBehavior.Auto, ownerWindow: null),
-        //            //userId: new UserIdentifier(userId, UserIdentifierType.RequiredDisplayableId));
-        //    }
-        //    else
-        //    {
-        //        acquireTokenTask = context.AcquireTokenAsync(
-        //            resource: "https://management.core.windows.net/",
-        //            clientId: _settings.ClientId,
-        //            userCredential: new UserCredential(userId, "MacB00k86!"));
-        //            //redirectUri: new Uri("urn:ietf:wg:oauth:2.0:oob"),
-        //            //parameters: new PlatformParameters(alwaysPrompt ? PromptBehavior.Always : PromptBehavior.Auto, ownerWindow: null));
-        //    }
-
-        //    try
-        //    {
-        //        acquireTokenTask.Wait();
-        //        return acquireTokenTask.Result;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e.InnerException;
-        //    }
-        //}
     }
 }

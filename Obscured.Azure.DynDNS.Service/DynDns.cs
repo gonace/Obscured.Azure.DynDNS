@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Timers;
+using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Utilities;
-
-using Microsoft.Azure;
-using Microsoft.Azure.Management.Dns;
-using Microsoft.Azure.Management.Dns.Models;
+using RestSharp;
+using RestSharp.Authenticators;
+using Newtonsoft.Json;
 
 namespace Obscured.Azure.DynDNS.Service
 {
@@ -18,25 +16,60 @@ namespace Obscured.Azure.DynDNS.Service
         private static EventLog _eventLog;
         private static ISettings _settings;
         private static INetwork _networkHelper;
+        private static IAzureHelper _azureHelper;
 
-        public DynDns(ISettings settings, INetwork network)
+        public DynDns(ISettings settings, INetwork network, IAzureHelper azureHelper)
         {
             _settings = settings;
             _networkHelper = network;
-            AutoLog = false;
+            _azureHelper = azureHelper;
 
-            var subID = _settings.SubscriptionId;
-            var ip = _networkHelper.GetIpAddress();
-            /*
+            #region Logging
+            _eventLog = new EventLog();
             if (!EventLog.SourceExists("Azure.DynDNS"))
+            {
                 EventLog.CreateEventSource("Azure.DynDNS", "Obscured");
+            }
 
             _eventLog.Source = "Azure.DynDNS";
             _eventLog.Log = "Obscured";
+            #endregion
+
+            /*var jwt = _azureHelper.GetAuthToken(_azureHelper.GetSubscriptionTenantId(_settings.SubscriptionId), _settings.ClientId, _settings.ClientSecret);
+
+            var client = new RestClient(_settings.Azure.BaseUri) { Authenticator = new JwtAuthenticator(jwt) };
+
+            
+            var request = new RestRequest(_settings.Azure.RecordUri, Method.GET);
+            request.AddUrlSegment("subscriptionId", _settings.SubscriptionId);
+            request.AddUrlSegment("resourceGroupName", _settings.ResourceGroup);
+            request.AddUrlSegment("zoneName", "obscured.se");
+            request.AddUrlSegment("recordType", "A");
+            request.AddUrlSegment("recordSetName", "dyndns");
+            var response = client.Execute(request);
+
+            var test = JsonConvert.DeserializeObject<Core.Models.Record>(response.Content);
+
+            var test2 = JsonConvert.SerializeObject(test, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            });
+
+            /*
+            var request = new RestRequest(_settings.Azure.ZonesUri, Method.GET);
+            request.AddUrlSegment("subscriptionId", _settings.SubscriptionId);
+            request.AddUrlSegment("resourceGroupName", _settings.ResourceGroup);
+            var response = client.Execute(request);
             */
 
-            //string jwt = GetAToken();
-            //var tcCreds = new TokenCloudCredentials(subID, jwt);
+            /*
+            var request = new RestRequest(_settings.Azure.RecordsUri, Method.GET);
+            request.AddUrlSegment("subscriptionId", _settings.SubscriptionId);
+            request.AddUrlSegment("resourceGroupName", _settings.ResourceGroup);
+            request.AddUrlSegment("zoneName", "clanwiki.nu");
+            var response = client.Execute(request);
+            */
 
             InitializeComponent();
         }
@@ -47,7 +80,8 @@ namespace Obscured.Azure.DynDNS.Service
             Debugger.Launch();
             #endif
 
-            _appTimer = new Timer(60 * 1000);
+            _eventLog.WriteEntry("Started at " + DateTime.Now.ToString("yyy-MM-dd HH:mm:ss"));
+            _appTimer = new Timer(_settings.PoolingInterval * 1000);
             _appTimer.Elapsed += new System.Timers.ElapsedEventHandler(TimerElapsed);
             _appTimer.Start();
 
@@ -55,17 +89,18 @@ namespace Obscured.Azure.DynDNS.Service
 
         protected override void OnStop()
         {
-            _eventLog.WriteEntry("Obscured.Azure.DynDNS Service was stopped.", EventLogEntryType.Warning);
+            _appTimer.Stop();
+            _appTimer.Dispose();
+            _eventLog.WriteEntry("Obscured.Azure.DynDNS Service was stopped at " + DateTime.Now.ToString("yyy-MM-dd HH:mm:ss"), EventLogEntryType.Warning);
         }
 
         private static void TimerElapsed(object sender, EventArgs e)
         {
             _appTimer.Stop();
-            _eventLog.WriteEntry("Started at" + DateTime.Now);
             try
             {
-                _eventLog.WriteEntry("Checking if ip address was changed since last run");
-
+                _eventLog.WriteEntry("Running ip check...");
+                _eventLog.WriteEntry("Fetched ip: " + _networkHelper.GetIpAddress(_settings.Provider));
             }
             catch (Exception ex)
             {

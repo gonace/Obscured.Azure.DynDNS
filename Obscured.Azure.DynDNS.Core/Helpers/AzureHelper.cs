@@ -21,7 +21,7 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
         public string GetSubscriptionTenantId(string subscriptionId)
         {
             //  URL to Azure Resource Manager API
-            var url = string.Format(_settings.Obscured.SubscriptionUri, subscriptionId);
+            var url = string.Format(_settings.Azure.ManagementUri, subscriptionId);
 
             // Attempting an ARM request without JWT will return an auth discovery header
             AuthenticationHeaderValue wwwAuthenticateHeader;
@@ -42,67 +42,68 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
             var tenantId = new Uri(authUrl).AbsolutePath.Trim('/');
             return tenantId;
         }
-
         /*
          *   Get an auth token for a given tenant ID (from GetSubscriptionTenantId)
          *   userId specifies the expected user, if no userId is specified alwaysPrompt=false will use current user if already logged in
          */
-        public string GetAuthToken(string tenantId, bool alwaysPrompt = false, string userId = null)
+        public string GetAuthToken(string tenantId, string clientId, string clientSecret)
         {
-            AuthenticationResult authResult;
             try
             {
-                authResult = GetAuthResult(tenantId, alwaysPrompt, userId);
-            }
-            catch (Exception e)
-            {
-                if (e.Message.ToLower().Contains("returned by service does not match user"))
+                var authContext = new AuthenticationContext(string.Format("https://login.windows.net/{0}", tenantId));
+                var credential = new ClientCredential(clientId, clientSecret);
+
+                //var result = authContext.AcquireTokenAsync(resource: "https://management.core.windows.net/{0}", clientCredential: credential);
+                var task = authContext.AcquireTokenAsync("https://management.core.windows.net/", credential);
+                Task.WhenAny(Task.WhenAll(task), Task.Delay(60000));
+
+                var result = task.Result;
+                if (result == null)
                 {
-                    Console.WriteLine("Got username exception, trying that again without username...");
-                    // if it complained about username provided, try without it
-                    authResult = GetAuthResult(tenantId, true, null);
+                    throw new InvalidOperationException("Failed to obtain the JWT token");
                 }
-                else
-                {
-                    throw e;
-                }
-            }
-
-            return authResult == null ? null : authResult.CreateAuthorizationHeader().Substring("Bearer ".Length);
-        }
-
-        public AuthenticationResult GetAuthResult(string tenantId, bool alwaysPrompt, string userId)
-        {
-            var context = new AuthenticationContext(string.Format("https://login.windows.net/{0}", tenantId));
-
-            Task<AuthenticationResult> acquireTokenTask;
-            if (!string.IsNullOrEmpty(userId))
-            {
-                acquireTokenTask = context.AcquireTokenAsync(
-                    resource: _settings.Obscured.ManagementUri,
-                    clientId: "1950a258-227b-4e31-a9cf-717495945fc2",
-                    redirectUri: new Uri("urn:ietf:wg:oauth:2.0:oob"),
-                    parameters: new PlatformParameters(promptBehavior: alwaysPrompt ? PromptBehavior.Always : PromptBehavior.Auto, ownerWindow: null),
-                    userId: new UserIdentifier(userId, UserIdentifierType.RequiredDisplayableId));
-            }
-            else
-            {
-                acquireTokenTask = context.AcquireTokenAsync(
-                    resource: _settings.Obscured.ManagementUri,
-                    clientId: "1950a258-227b-4e31-a9cf-717495945fc2",
-                    redirectUri: new Uri("urn:ietf:wg:oauth:2.0:oob"),
-                    parameters: new PlatformParameters(alwaysPrompt ? PromptBehavior.Always : PromptBehavior.Auto, ownerWindow: null));
-            }
-
-            try
-            {
-                acquireTokenTask.Wait();
-                return acquireTokenTask.Result;
+                return result.AccessToken;
             }
             catch (Exception e)
             {
                 throw e.InnerException;
             }
         }
+
+        //public AuthenticationResult GetAuthResult(string tenantId, bool alwaysPrompt, string userId)
+        //{
+        //    var context = new AuthenticationContext(string.Format("https://login.windows.net/{0}", tenantId));
+
+        //    Task<AuthenticationResult> acquireTokenTask;
+        //    if (!string.IsNullOrEmpty(userId))
+        //    {
+        //        acquireTokenTask = context.AcquireTokenAsync(
+        //            resource: "https://management.core.windows.net/",
+        //            clientId: _settings.ClientId,
+        //            userCredential: new UserCredential(userId, "MacB00k86!"));
+        //            //redirectUri: new Uri("urn:ietf:wg:oauth:2.0:oob"),
+        //            //arameters: new PlatformParameters(promptBehavior: alwaysPrompt ? PromptBehavior.Always : PromptBehavior.Auto, ownerWindow: null),
+        //            //userId: new UserIdentifier(userId, UserIdentifierType.RequiredDisplayableId));
+        //    }
+        //    else
+        //    {
+        //        acquireTokenTask = context.AcquireTokenAsync(
+        //            resource: "https://management.core.windows.net/",
+        //            clientId: _settings.ClientId,
+        //            userCredential: new UserCredential(userId, "MacB00k86!"));
+        //            //redirectUri: new Uri("urn:ietf:wg:oauth:2.0:oob"),
+        //            //parameters: new PlatformParameters(alwaysPrompt ? PromptBehavior.Always : PromptBehavior.Auto, ownerWindow: null));
+        //    }
+
+        //    try
+        //    {
+        //        acquireTokenTask.Wait();
+        //        return acquireTokenTask.Result;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e.InnerException;
+        //    }
+        //}
     }
 }

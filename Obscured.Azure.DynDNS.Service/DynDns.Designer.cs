@@ -31,6 +31,9 @@ namespace Obscured.Azure.DynDNS.Service
         {
             components = new System.ComponentModel.Container();
             this.ServiceName = "DynDns";
+            this.CanStop = true;
+            this.CanPauseAndContinue = false;
+            this.AutoLog = false;
         }
         #endregion
     }

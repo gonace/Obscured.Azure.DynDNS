@@ -1,7 +1,9 @@
-﻿namespace Obscured.Azure.DynDNS.Core.Utilities
+﻿using System.Net;
+
+namespace Obscured.Azure.DynDNS.Core.Utilities
 {
     public interface INetwork
     {
-        string GetIpAddress();
+        IPAddress GetIpAddress(string provider = "dyndns");
     }
 }

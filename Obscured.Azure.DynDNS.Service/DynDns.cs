@@ -25,12 +25,8 @@ namespace Obscured.Azure.DynDNS.Service
 
         protected override void OnStart(string[] args)
         {
-            #if DEBUG
-            Debugger.Launch();
-            #endif
-
-            _eventLogger.LogMessage("Started at " + DateTime.Now.ToString("yyy-MM-dd HH:mm:ss"));
-            _appTimer = new Timer(_settings.PoolingInterval * 1000);
+            _eventLogger.LogMessage("Started at " + DateTime.Now.ToString("yyy-MM-dd HH:mm:ss") + ", with the intervall of " + TimeSpanUtility.ConvertSecondsToMinutes(_settings.PoolingInterval) + "min");
+            _appTimer = new Timer(TimeSpanUtility.ConvertSecondsToMilliseconds(_settings.PoolingInterval));
             _appTimer.Elapsed += new System.Timers.ElapsedEventHandler(TimerElapsed);
             _appTimer.Start();
         }
@@ -52,7 +48,10 @@ namespace Obscured.Azure.DynDNS.Service
 
                 if (result.Success)
                 {
-                    _eventLogger.LogMessage(String.Format("IP Address was updated from {0} with {1}", result.OldAddress, result.NewAddress));
+                    _eventLogger.LogMessage(result.Updated
+                        ? String.Format("IP Address was updated from {0} to {1}", result.OldAddress, result.NewAddress)
+                        : String.Format("IP Address was not updated since the old ({0}) and new ({1}) are the same",
+                            result.OldAddress, result.NewAddress));
                 }
                 else
                 {

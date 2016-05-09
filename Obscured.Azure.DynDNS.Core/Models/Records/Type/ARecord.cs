@@ -2,6 +2,6 @@
 {
     public class ARecord
     {
-        public string Ipv4Address { get; set; }
+        public string ipv4Address { get; set; }
     }
 }

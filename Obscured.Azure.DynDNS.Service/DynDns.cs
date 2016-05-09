@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Timers;
-using Obscured.Azure.DynDNS.Core.Commands;
-using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using Obscured.Azure.DynDNS.Service.Helpers;
 
@@ -13,24 +11,14 @@ namespace Obscured.Azure.DynDNS.Service
     {
         private static Timer _appTimer;
         private static ISettings _settings;
-        private static INetwork _networkHelper;
         private static IEventLogger _eventLogger;
-        private static IAzureHelper _azureHelper;
         private static IServiceHelper _serviceHelper;
-        private static IRecordsCommand _recordsCommand;
-        private static IZonesCommand _zonesCommand;
 
-        public DynDns(ISettings settings, INetwork network, IAzureHelper azureHelper, IServiceHelper serviceHelper, IEventLogger eventLogger, IRecordsCommand recordsCommand, IZonesCommand zonesCommand)
+        public DynDns(ISettings settings, IServiceHelper serviceHelper, IEventLogger eventLogger)
         {
             _settings = settings;
-            _networkHelper = network;
-            _azureHelper = azureHelper;
             _serviceHelper = serviceHelper;
             _eventLogger = eventLogger;
-            _recordsCommand = recordsCommand;
-            _zonesCommand = zonesCommand;
-
-            var result = _serviceHelper.Check();
 
             InitializeComponent();
         }
@@ -60,9 +48,16 @@ namespace Obscured.Azure.DynDNS.Service
             {
                 _appTimer.Stop();
                 _eventLogger.LogMessage("Running ip check...");
-                var ipAddr = _networkHelper.GetIpAddress(_settings.Provider);
                 var result = _serviceHelper.Check();
-                _eventLogger.LogMessage("Fetched ip: " + ipAddr);
+
+                if (result.Success)
+                {
+                    _eventLogger.LogMessage(String.Format("IP Address was updated from {0} with {1}", result.OldAddress, result.NewAddress));
+                }
+                else
+                {
+                    _eventLogger.LogMessage(result.Exception.Message, EventLogEntryType.Error);
+                }
                 _appTimer.Start();
             }
             catch (Exception ex)

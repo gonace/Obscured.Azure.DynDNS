@@ -2,6 +2,6 @@
 {
     public class TxtRecords
     {
-        public string Value { get; set; }
+        public string value { get; set; }
     }
 }

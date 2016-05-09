@@ -2,7 +2,7 @@
 {
     public class MxRecord
     {
-        public string Exchange { get; set; }
-        public int Preference { get; set; }
+        public string preference { get; set; }
+        public string exchange { get; set; }
     }
 }

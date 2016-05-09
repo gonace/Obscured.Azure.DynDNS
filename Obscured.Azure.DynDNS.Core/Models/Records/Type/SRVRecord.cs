@@ -2,9 +2,9 @@
 {
     public class SrvRecord
     {
-        public int Priority { get; set; }
-        public int Weight { get; set; }
-        public ushort Port { get; set; }
-        public string Target { get; set; }
+        public int priority { get; set; }
+        public int weight { get; set; }
+        public ushort port { get; set; }
+        public string target { get; set; }
     }
 }

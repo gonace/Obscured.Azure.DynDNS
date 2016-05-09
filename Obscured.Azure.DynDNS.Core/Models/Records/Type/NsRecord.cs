@@ -2,6 +2,6 @@
 {
     public class NsRecord
     {
-        public string Nsdname { get; set; }
+        public string nsdname { get; set; }
     }
 }

@@ -4,9 +4,9 @@ namespace Obscured.Azure.DynDNS.Core.Models.Zones
 {
     public class Properties
     {
-        public int MaxNumberOfRecordSets { get; set; }
-        public IList<string> NameServers { get; set; }
-        public int NumberOfRecordSets { get; set; }
-        public string ParentResourceGroupName { get; set; }
+        public int numberOfRecordSets { get; set; }
+        public int maxNumberOfRecordSets { get; set; }
+        public IList<string> nameServers { get; set; }
+        public string parentResourceGroupName { get; set; }
     }
 }

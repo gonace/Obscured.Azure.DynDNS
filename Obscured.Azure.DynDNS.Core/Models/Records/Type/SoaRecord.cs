@@ -2,12 +2,12 @@
 {
     public class SoaRecord
     {
-        public string Email { get; set; }
-        public int ExpireTime { get; set; }
-        public string Host { get; set; }
-        public int MinimumTtl { get; set; }
-        public int RefreshTime { get; set; }
-        public int RetryTime { get; set; }
-        public int SerialNumber { get; set; }
+        public string email { get; set; }
+        public int expireTime { get; set; }
+        public string host { get; set; }
+        public int minimumTTL { get; set; }
+        public int refreshTime { get; set; }
+        public int retryTime { get; set; }
+        public int serialNumber { get; set; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public class AaaaRecord
     {
-        public string Ipv6Address { get; set; }
+        public string ipv6Address { get; set; }
     }
 }

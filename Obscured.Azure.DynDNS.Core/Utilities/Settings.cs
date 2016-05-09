@@ -12,9 +12,10 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string RecordName { get; set; }
+        public string RecordType { get; set; }
         public string ResourceGroup { get; set; }
         public string SubscriptionId { get; set; }
-        public string Provider { get; set; }
+        public string Providers { get; set; }
         public int PoolingInterval { get; set; }
         public string ZoneName { get; set; }
 
@@ -29,9 +30,10 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
             ClientId = _configHelper.Get("ClientId") ?? "";
             ClientSecret = _configHelper.Get("ClientSecret") ?? "";
             RecordName = _configHelper.Get("RecordName") ?? "";
+            RecordType = _configHelper.Get("RecordType") ?? "";
             ResourceGroup = _configHelper.Get("ResourceGroup") ?? "";
             SubscriptionId = _configHelper.Get("SubscriptionId") ?? "";
-            Provider = _configHelper.Get("Provider") ?? "";
+            Providers = _configHelper.Get("Providers") ?? "";
             PoolingInterval = Convert.ToInt32(_configHelper.Get("PoolingInterval"));
             ZoneName = _configHelper.Get("ZoneName") ?? "";
 

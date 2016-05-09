@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Obscured.Azure.DynDNS.Core.Models
 {
     public class Record
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public Guid Etag { get; set; }
-        public string Location { get; set; }
-        public Records.Properties Properties { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public IDictionary<string, string> tags { get; set; }
+        public string type { get; set; }
+        public Guid? etag { get; set; }
+        public string location { get; set; }
+        public Records.Properties properties { get; set; }
     }
 }

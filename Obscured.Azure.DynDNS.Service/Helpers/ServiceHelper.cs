@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 using Obscured.Azure.DynDNS.Core.Commands;
 using Obscured.Azure.DynDNS.Core.Models.Records.Type;
 using Obscured.Azure.DynDNS.Core.Utilities;
@@ -27,34 +26,75 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             _zonesCommand = zonesCommand;
         }
 
-        public bool Check()
+        public Core.Models.Result Check()
         {
-            var ip = _networkHelper.GetIpAddress();
-            var record = _recordsCommand.Get(_settings.RecordName, "A");
+            var result = new Core.Models.Result();
 
-            if (record == null)
+            try
             {
-                throw new NullReferenceException();
-            }
+                IPAddress ipAddress;
+                var ipAddresses = _networkHelper.GetIpAddress(_settings.Providers);
+                result.Providers = ipAddresses;
+                _eventLogger.LogMessage(JsonConvert.SerializeObject(ipAddresses), EventLogEntryType.Information);
+                if (ipAddresses.Count > 1)
+                {
+                    ipAddress = IPAddress.Parse(ipAddresses.GroupBy(x => x.ReturnedAddress).OrderByDescending(ip => ip.Count()).First().First().ReturnedAddress);
+                    _eventLogger.LogMessage(String.Format("Used the most common response, which was: {0}", ipAddress), EventLogEntryType.Information);
+                }
+                else if (ipAddresses.Count == 1)
+                {
+                    ipAddress = IPAddress.Parse(ipAddresses.First().ReturnedAddress);
+                    _eventLogger.LogMessage(String.Format("Used response from provider: {0}, which was: {1}", ipAddresses.First().Name, ipAddress), EventLogEntryType.Information);
+                }
+                else
+                {
+                    throw new NullReferenceException("No ip-addresses could be fetch by selected providers");
+                }
+                result.NewAddress = ipAddress;
 
-            if (record.Properties.ARecords.Any(x => !x.Ipv4Address.Equals(ip.ToString())))
+
+                var record = _recordsCommand.Get(_settings.RecordName, _settings.RecordType);
+                _eventLogger.LogMessage("External ip-address was concluded to be: " + ipAddress);
+
+                if (record == null || record.properties == null)
+                {
+                    throw new NullReferenceException(String.Format("No record could be fetch from Azure, make sure the record that should be updates exsist, record: {0}", (_settings.RecordName + '.' + _settings.ZoneName)));
+                }
+
+                if (record.properties.ARecords.Count > 0)
+                {
+                    var oldAddress = record.properties.ARecords.FirstOrDefault();
+                    if (oldAddress != null)
+                        result.OldAddress = IPAddress.Parse(oldAddress.ipv4Address);
+                }
+
+                if (record.properties.ARecords.Any(x => !x.ipv4Address.Equals(ipAddress.ToString())))
+                {
+                    result.Updated = Update(record, ipAddress);
+                }
+                result.Success = true;
+
+                return result;
+            }
+            catch (Exception ex)
             {
-                _eventLogger.LogMessage(String.Format("New ip adress found {0}", ip), EventLogEntryType.Information);
-                return Update(ip);
+                _eventLogger.LogMessage(ex.Message, EventLogEntryType.Error);
+                result.Exception = ex;
+                return result;
             }
-
-            return true;
         }
 
-        private static bool Update(IPAddress newIp)
+        private static bool Update(Core.Models.Record record, IPAddress newIp)
         {
             try
             {
-                var record = _recordsCommand.Get(_settings.RecordName, "A");
-                record.Properties.ARecords.Clear();
-                record.Properties.ARecords.Insert(0, new ARecord { Ipv4Address = newIp.ToString()});
+                record.properties.ARecords.Clear();
+                record.properties.ARecords.Insert(0, new ARecord { ipv4Address = newIp.ToString() });
 
-                return true;
+                var resp = _recordsCommand.Update(record, _settings.ZoneName);
+
+                if (resp.GetType().FullName == "Obscured.Azure.DynDNS.Core.Models.Record")
+                    return true;
             }
             catch (Exception ex)
             {

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using Obscured.Azure.DynDNS.Core.Models;
 
 namespace Obscured.Azure.DynDNS.Core.Utilities
 {
@@ -16,25 +18,47 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
             _eventLogger = new EventLogger("Azure.DynDNS");
         }
 
-        public IPAddress GetIpAddress(string provider = "dyndns")
+        public List<Provider> GetIpAddress(string providers = "dyndns")
         {
-            switch (provider)
+            var providersArr = providers.Split(',');
+            var providersResult = new List<Provider>();
+
+            foreach (var provider in providersArr)
             {
-                case "dyndns":
-                    return ByDynDns();
-                case "freegeoip":
-                    return ByFreeGeoIp();
-                case "ipify":
-                    return ByIpify();
-                case "ipinfo":
-                    return ByIpInfo();
-                case "icanhazip":
-                    return ByICanHazIp();
-                case "wtfismyip":
-                    return ByWtfIsMyIp();
-                default:
-                    return ByDynDns();
+                IPAddress returnedAddress;
+                switch (provider)
+                {
+                    case "dyndns":
+                        returnedAddress = ByDynDns();
+                        break;
+                    case "freegeoip":
+                        returnedAddress = ByFreeGeoIp();
+                        break;
+                    case "ipify":
+                        returnedAddress = ByIpify();
+                        break;
+                    case "ipinfo":
+                        returnedAddress = ByIpInfo();
+                        break;
+                    case "icanhazip":
+                        returnedAddress = ByICanHazIp();
+                        break;
+                    case "wtfismyip":
+                        returnedAddress = ByWtfIsMyIp();
+                        break;
+                    default:
+                        returnedAddress = ByDynDns();
+                        break;
+                }
+
+                providersResult.Add(new Provider
+                {
+                    Name = provider,
+                    ReturnedAddress = returnedAddress.ToString()
+                });
             }
+
+            return providersResult;
         }
 
         private static IPAddress ByDynDns()

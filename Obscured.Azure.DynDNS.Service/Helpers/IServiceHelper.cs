@@ -2,6 +2,6 @@
 {
     public interface IServiceHelper
     {
-        bool Check();
+        Core.Models.Result Check();
     }
 }

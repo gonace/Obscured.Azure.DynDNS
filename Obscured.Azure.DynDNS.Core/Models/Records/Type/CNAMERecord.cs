@@ -2,6 +2,6 @@
 {
     public class CnameRecord
     {
-        public string Cname { get; set; }
+        public string cname { get; set; }
     }
 }

@@ -1,4 +1,8 @@
-﻿namespace Obscured.Azure.DynDNS.Service
+﻿using System.Configuration.Install;
+using System.Security.AccessControl;
+using System.ServiceProcess;
+
+namespace Obscured.Azure.DynDNS.Service
 {
     partial class ProjectInstaller
     {
@@ -28,35 +32,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.serviceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
-            this.serviceInstaller = new System.ServiceProcess.ServiceInstaller();
+            this.ServiceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
+            this.ServiceInstaller = new System.ServiceProcess.ServiceInstaller();
             // 
-            // serviceProcessInstaller
+            // ServiceProcessInstaller
             // 
-            this.serviceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.NetworkService;
-            this.serviceProcessInstaller.Password = null;
-            this.serviceProcessInstaller.Username = null;
-            this.serviceProcessInstaller.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceProcessInstaller_AfterInstall);
+            this.ServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.NetworkService;
+            this.ServiceProcessInstaller.Password = null;
+            this.ServiceProcessInstaller.Username = null;
+            this.ServiceProcessInstaller.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.ServiceProcessInstaller_AfterInstall);
+            this.ServiceProcessInstaller.Committed += new System.Configuration.Install.InstallEventHandler(this.ServiceProcessInstaller_Commited);
             // 
-            // serviceInstaller
+            // ServiceInstaller
             // 
-            this.serviceInstaller.Description = "Updates a record with the exernal ip-address of the computer running the service," +
+            this.ServiceInstaller.Description = "Updates a record with the exernal ip-address of the computer running the service," +
     " each hour the ip-address is checked by selected source.";
-            this.serviceInstaller.DisplayName = "Obscured.Azure.DynDNS";
-            this.serviceInstaller.ServiceName = "DynDns";
-            this.serviceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.ServiceInstaller.DisplayName = "Obscured.Azure.DynDNS";
+            this.ServiceInstaller.ServiceName = "Obscured.Azure.DynDNS";
+            this.ServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.serviceProcessInstaller,
-            this.serviceInstaller});
+            this.ServiceProcessInstaller,
+            this.ServiceInstaller});
 
         }
 
         #endregion
 
-        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller;
-        private System.ServiceProcess.ServiceInstaller serviceInstaller;
+        private System.ServiceProcess.ServiceProcessInstaller ServiceProcessInstaller;
+        private System.ServiceProcess.ServiceInstaller ServiceInstaller;
     }
 }

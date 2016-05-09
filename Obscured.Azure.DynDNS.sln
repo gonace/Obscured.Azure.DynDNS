@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.Azure.DynDNS.Core", "Obscured.Azure.DynDNS.Core\Obscured.Azure.DynDNS.Core.csproj", "{5FE95D10-11B5-465F-9F86-939CF2F65BAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.Azure.DynDNS.Service", "Obscured.Azure.DynDNS.Service\Obscured.Azure.DynDNS.Service.csproj", "{F56A8A99-62F4-48A5-B97F-B591289E62C9}"
@@ -14,20 +16,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BF7ABB
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Obscured.Azure.DynDNS.Setup", "Obscured.Azure.DynDNS.Setup\Obscured.Azure.DynDNS.Setup.vdproj", "{3021D697-E615-48ED-B083-D5EDDABDF4F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Test|Any CPU.Build.0 = Test|Any CPU
 		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Test|Any CPU.Build.0 = Test|Any CPU
+		{3021D697-E615-48ED-B083-D5EDDABDF4F5}.Debug|Any CPU.ActiveCfg = Debug
+		{3021D697-E615-48ED-B083-D5EDDABDF4F5}.Release|Any CPU.ActiveCfg = Release
+		{3021D697-E615-48ED-B083-D5EDDABDF4F5}.Test|Any CPU.ActiveCfg = Test
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

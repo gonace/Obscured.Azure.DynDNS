@@ -39,12 +39,12 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
                 if (ipAddresses.Count > 1)
                 {
                     ipAddress = IPAddress.Parse(ipAddresses.GroupBy(x => x.ReturnedAddress).OrderByDescending(ip => ip.Count()).First().First().ReturnedAddress);
-                    _eventLogger.LogMessage(String.Format("Used the most common response, which was: {0}", ipAddress), EventLogEntryType.Information);
+                    _eventLogger.LogMessage($"Used the most common response, which was: {ipAddress}", EventLogEntryType.Information);
                 }
                 else if (ipAddresses.Count == 1)
                 {
                     ipAddress = IPAddress.Parse(ipAddresses.First().ReturnedAddress);
-                    _eventLogger.LogMessage(String.Format("Used response from provider: {0}, which was: {1}", ipAddresses.First().Name, ipAddress), EventLogEntryType.Information);
+                    _eventLogger.LogMessage($"Used response from provider: {ipAddresses.First().Name}, which was: {ipAddress}", EventLogEntryType.Information);
                 }
                 else
                 {
@@ -56,9 +56,9 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
                 var record = _recordsCommand.Get(_settings.RecordName, _settings.RecordType);
                 _eventLogger.LogMessage("External ip-address was concluded to be: " + ipAddress);
 
-                if (record == null || record.properties == null)
+                if (record?.properties == null)
                 {
-                    throw new NullReferenceException(String.Format("No record could be fetch from Azure, make sure the record that should be updates exsist, record: {0}", (_settings.RecordName + '.' + _settings.ZoneName)));
+                    throw new NullReferenceException($"No record could be fetch from Azure, make sure the record that should be updates exsist, record: {(_settings.RecordName + '.' + _settings.ZoneName)}");
                 }
 
                 if (record.properties.ARecords.Count > 0)

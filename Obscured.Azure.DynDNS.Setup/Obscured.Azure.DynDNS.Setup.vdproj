@@ -58,12 +58,6 @@
         "Entry"
         {
         "MsmKey" = "8:_06C53174C161502E6AB1534B56034F0D"
-        "OwnerKey" = "8:_071C554D3C4DD6082D0075F9C081A120"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_06C53174C161502E6AB1534B56034F0D"
         "OwnerKey" = "8:_68C48402EF33D06D8D201D151FB60C82"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,6 +89,12 @@
         {
         "MsmKey" = "8:_06C53174C161502E6AB1534B56034F0D"
         "OwnerKey" = "8:_E8656A4851161AD2C9D6A6DED4D6319F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_06C53174C161502E6AB1534B56034F0D"
+        "OwnerKey" = "8:_071C554D3C4DD6082D0075F9C081A120"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -766,12 +766,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_071C554D3C4DD6082D0075F9C081A120"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_441D4CA420AE6F308559CB26DF542FE6"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -845,6 +839,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_89B0F5C279A25A24A84570B29B374A46"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_071C554D3C4DD6082D0075F9C081A120"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1196,6 +1196,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
         "Release"
@@ -1220,6 +1228,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
         "Test"
@@ -1244,6 +1260,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
     }
@@ -1277,7 +1301,7 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_17E222BD_E612_4276_B6E8_3A496E6B40B5"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
+            "CustomActionData" = "8:/ClientId=[AZURE_CLIENT_ID] /ClientSecret=[AZURE_CLIENT_SECRET] /SubscriptionId=[AZURE_SUBSCRIPTION_ID] /ResourceGroup=[AZURE_RESOURCE_GROUP] /ZoneName=[DOMAIN_ZONE_NAME] /RecordName=[DOMAIN_RECORD_NAME] /RecordType=[DOMAIN_RECORD_TYPE] /Providers=[DOMAIN_PROVIDERS]"
             }
         }
         "DefaultFeature"
@@ -3498,7 +3522,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Obscured.Azure.DynDNS"
         "ProductCode" = "8:{717EEC3C-1FE3-4D13-A8BF-8FB20CBEC953}"
-        "PackageCode" = "8:{AABB9C68-8D48-4EE7-9909-1AEB29EF6F50}"
+        "PackageCode" = "8:{317B84AB-44F0-46B3-BC78-5CED9CD85EDA}"
         "UpgradeCode" = "8:{5FFC7197-3122-452E-AE10-B375C8E772FB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -4028,8 +4052,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1215"
+                            "Setting" = "3:2"
+                            "Value" = "8:To allow this service to authenticate using an Microsoft Azure Active Directory account, you must register your application through the Microsoft Azure portal. If you don't have a Microsoft Azure account, you can signup for free."
                             "DefaultValue" = "8:#1215"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -4284,8 +4308,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1215"
+                            "Setting" = "3:2"
+                            "Value" = "8:The service (Obsucred.Azure.DynDNS) will use the The Microsoft Azure DNS Resource Provider REST API to create and modify a single DNS record hosted within Azure. All you need to to is provide the information about what zone (domain), record (subdomain), type (MUST BE \"A\") and a set of Providers to probe for IP Adress changes."
                             "DefaultValue" = "8:#1215"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -4376,7 +4400,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:dyndns"
+                            "Value" = "8:"
                             "DefaultValue" = "8:"
                             "UsePlugInResources" = "11:TRUE"
                             }

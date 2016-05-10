@@ -49,9 +49,8 @@ namespace Obscured.Azure.DynDNS.Service
                 if (result.Success)
                 {
                     _eventLogger.LogMessage(result.Updated
-                        ? String.Format("IP Address was updated from {0} to {1}", result.OldAddress, result.NewAddress)
-                        : String.Format("IP Address was not updated since the old ({0}) and new ({1}) are the same",
-                            result.OldAddress, result.NewAddress));
+                        ? $"IP Address was updated from {result.OldAddress} to {result.NewAddress}"
+                        : $"IP Address was not updated since the old ({result.OldAddress}) and new ({result.NewAddress}) are the same");
                 }
                 else
                 {

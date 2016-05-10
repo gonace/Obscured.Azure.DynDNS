@@ -81,7 +81,11 @@
     <Compile Include="Helpers\AzureHelper.cs" />
     <Compile Include="Helpers\IAzureHelper.cs" />
     <Compile Include="Helpers\RegistryHelper.cs" />
+    <Compile Include="Models\Azure\Error.cs" />
+    <Compile Include="Models\Azure\Response.cs" />
     <Compile Include="Models\Provider.cs" />
+    <Compile Include="Models\Services\ProviderResult.cs" />
+    <Compile Include="Models\Services\ServiceProviders.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\Records\Properties.cs" />
     <Compile Include="Models\Records\Type\ARecord.cs" />

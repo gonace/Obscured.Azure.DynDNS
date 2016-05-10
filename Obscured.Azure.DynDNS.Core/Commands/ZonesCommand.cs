@@ -1,50 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Models;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using RestSharp;
-using RestSharp.Authenticators;
 
 namespace Obscured.Azure.DynDNS.Core.Commands
 {
     public class ZonesCommand : BaseCommand, IZonesCommand
     {
-        private readonly RestClient _restClient;
-        private readonly Settings _settings;
-
-        public ZonesCommand(RestClient restClient, Settings settings) : base(restClient, settings)
+        public ZonesCommand(IRestClient restClient, ISettings settings, IEventLogger eventLogger) : base(restClient, settings, eventLogger)
         {
-            _restClient = restClient;
-            _settings = settings;
-            
-            var jwToken = new AzureHelper(settings).GetAuthToken(
-                new AzureHelper(settings).GetSubscriptionTenantId(_settings.SubscriptionId), _settings.ClientId,
-                _settings.ClientSecret);
-            _restClient.Authenticator = new JwtAuthenticator(jwToken);
-            _restClient.BaseUrl = new System.Uri(_settings.Azure.BaseUri);
         }
 
         public IList<Zone> List()
         {
-            var request = new RestRequest(_settings.Azure.ZonesUri, Method.GET);
-            request.AddUrlSegment("subscriptionId", _settings.SubscriptionId);
-            request.AddUrlSegment("resourceGroupName", _settings.ResourceGroup);
-            var response = _restClient.Execute(request);
+            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
+                ReAuthenticate();
 
-            return JsonConvert.DeserializeObject<IList<Zone>>(JObject.Parse(response.Content).GetValue("value").ToString());
+            var request = new RestRequest(Settings.Azure.ZonesUri, Method.GET);
+            request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
+            request.AddUrlSegment("resourceGroupName", Settings.ResourceGroup);
+
+            var response = RestClient.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<IList<Zone>>(JObject.Parse(response.Content).GetValue("value").ToString());
+
+            EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+            return null;
         }
 
         public Zone Get(string name)
         {
-            var request = new RestRequest(_settings.Azure.ZoneUri, Method.GET);
-            request.AddUrlSegment("subscriptionId", _settings.SubscriptionId);
-            request.AddUrlSegment("resourceGroupName", _settings.ResourceGroup);
-            request.AddUrlSegment("zoneName", _settings.ZoneName);
-            var response = _restClient.Execute(request);
+            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
+                ReAuthenticate();
 
-            return JsonConvert.DeserializeObject<Zone>(response.Content);
+            var request = new RestRequest(Settings.Azure.ZoneUri, Method.GET);
+            request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
+            request.AddUrlSegment("resourceGroupName", Settings.ResourceGroup);
+            request.AddUrlSegment("zoneName", Settings.ZoneName);
+
+            var response = RestClient.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<Zone>(response.Content);
+
+            EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+            return null;
         }
 
         public Zone Create(Zone zone)

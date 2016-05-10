@@ -1,6 +1,7 @@
 ﻿using Ninject.Modules;
 using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Service.Helpers;
+using RestSharp;
 
 namespace Obscured.Azure.DynDNS.Service.Ninject
 {
@@ -12,6 +13,7 @@ namespace Obscured.Azure.DynDNS.Service.Ninject
             Bind<IAzureHelper>().To<AzureHelper>().InTransientScope();
             Bind<RegistryHelper>().To<RegistryHelper>().InTransientScope();
             Bind<IServiceHelper>().To<ServiceHelper>().InTransientScope();
+            Bind<IRestClient>().To<RestClient>().InTransientScope();
         }
     }
 }

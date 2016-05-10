@@ -38,12 +38,12 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
                 _eventLogger.LogMessage(JsonConvert.SerializeObject(ipAddresses), EventLogEntryType.Information);
                 if (ipAddresses.Count > 1)
                 {
-                    ipAddress = IPAddress.Parse(ipAddresses.GroupBy(x => x.ReturnedAddress).OrderByDescending(ip => ip.Count()).First().First().ReturnedAddress);
+                    ipAddress = IPAddress.Parse(ipAddresses.GroupBy(x => x.ReturnedAddress).OrderByDescending(ip => ip.Count()).First().First().ReturnedAddress.ToString());
                     _eventLogger.LogMessage($"Used the most common response, which was: {ipAddress}", EventLogEntryType.Information);
                 }
                 else if (ipAddresses.Count == 1)
                 {
-                    ipAddress = IPAddress.Parse(ipAddresses.First().ReturnedAddress);
+                    ipAddress = IPAddress.Parse(ipAddresses.First().ReturnedAddress.ToString());
                     _eventLogger.LogMessage($"Used response from provider: {ipAddresses.First().Name}, which was: {ipAddress}", EventLogEntryType.Information);
                 }
                 else
@@ -54,13 +54,12 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
 
 
                 var record = _recordsCommand.Get(_settings.RecordName, _settings.RecordType);
-                _eventLogger.LogMessage("External ip-address was concluded to be: " + ipAddress);
-
                 if (record?.properties == null)
                 {
                     throw new NullReferenceException($"No record could be fetch from Azure, make sure the record that should be updates exsist, record: {(_settings.RecordName + '.' + _settings.ZoneName)}");
                 }
 
+                _eventLogger.LogMessage("External ip-address was concluded to be: " + ipAddress);
                 if (record.properties.ARecords.Count > 0)
                 {
                     var oldAddress = record.properties.ARecords.FirstOrDefault();
@@ -78,8 +77,8 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             }
             catch (Exception ex)
             {
-                _eventLogger.LogMessage(ex.Message, EventLogEntryType.Error);
-                result.Exception = ex;
+                _eventLogger.LogMessage(ex.InnerException.ToString(), EventLogEntryType.Error);
+                result.Exception = ex.InnerException;
                 return result;
             }
         }
@@ -100,7 +99,6 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             {
                 _eventLogger.LogMessage(ex.Message, EventLogEntryType.Error);
             }
-
             return false;
         }
     }

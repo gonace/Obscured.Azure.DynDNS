@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Obscured.Azure.DynDNS.Core.Models;
 
@@ -20,46 +23,44 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
 
         public List<Provider> GetIpAddress(string providers = "dyndns")
         {
-            var providersArr = providers.Split(',');
-            var providersResult = new List<Provider>();
-
-            foreach (var provider in providersArr)
+            var serviceProviders = new Models.Services.ServiceProviders();
+            var tasks = serviceProviders.Providers.Select(ProcessUrl).ToList();
+            try
             {
-                IPAddress returnedAddress;
-                switch (provider)
+                Task.WaitAll(tasks.ToArray());
+            }
+            catch (AggregateException) {}
+
+            return tasks.Select(t => t.Result).ToList();
+        }
+
+
+        private static async Task<Provider> ProcessUrl(Provider provider)
+        {
+            using (var httpClient = new HttpClient())
+            using (var response = await httpClient.GetAsync(new Uri(provider.URL)))
+            using (var content = response.Content)
+            {
+                var result = await content.ReadAsStringAsync();
+                var contentType = response.Content.Headers.ContentType;
+
+                if (!response.IsSuccessStatusCode) return null;
+
+                if (Equals(contentType.MediaType, "application/json"))
                 {
-                    case "dyndns":
-                        returnedAddress = ByDynDns();
-                        break;
-                    case "freegeoip":
-                        returnedAddress = ByFreeGeoIp();
-                        break;
-                    case "ipify":
-                        returnedAddress = ByIpify();
-                        break;
-                    case "ipinfo":
-                        returnedAddress = ByIpInfo();
-                        break;
-                    case "icanhazip":
-                        returnedAddress = ByICanHazIp();
-                        break;
-                    case "wtfismyip":
-                        returnedAddress = ByWtfIsMyIp();
-                        break;
-                    default:
-                        returnedAddress = ByDynDns();
-                        break;
+                    var json = JObject.Parse(result);
+                    provider.ReturnedAddress = json.GetValue("ip").ToString();
+                    return provider;
+                }
+                else if (Equals(contentType.MediaType, "text/html"))
+                {
+                    throw new NotImplementedException("You're using a provider that have an text/html response, this content-type is not supported.");
                 }
 
-                providersResult.Add(new Provider
-                {
-                    Name = provider,
-                    ReturnedAddress = returnedAddress.ToString()
-                });
+                throw new NotImplementedException($"You're using a provider that have an unsuported content-type {contentType.MediaType} response.");
             }
-
-            return providersResult;
         }
+
 
         private static IPAddress ByDynDns()
         {
@@ -113,7 +114,7 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
             try
             {
                 var resp = _webClient.DownloadString("https://ipinfo.io/ip");
-                return IPAddress.Parse(resp.Replace("\n", ""));
+                return IPAddress.Parse(resp.Replace("\n",""));
             }
             catch (Exception ex)
             {

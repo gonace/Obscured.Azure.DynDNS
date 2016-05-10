@@ -31,6 +31,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.9.302261508-alpha\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
@@ -72,7 +81,11 @@
     <Compile Include="Helpers\AzureHelper.cs" />
     <Compile Include="Helpers\IAzureHelper.cs" />
     <Compile Include="Helpers\RegistryHelper.cs" />
+    <Compile Include="Models\Azure\Error.cs" />
+    <Compile Include="Models\Azure\Response.cs" />
     <Compile Include="Models\Provider.cs" />
+    <Compile Include="Models\Services\ProviderResult.cs" />
+    <Compile Include="Models\Services\ServiceProviders.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\Records\Properties.cs" />
     <Compile Include="Models\Records\Type\ARecord.cs" />

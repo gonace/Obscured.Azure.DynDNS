@@ -46,11 +46,11 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
          *   Get an auth token for a given tenant ID (from GetSubscriptionTenantId)
          *   userId specifies the expected user, if no userId is specified alwaysPrompt=false will use current user if already logged in
          */
-        public string GetAuthToken(string tenantId, string clientId, string clientSecret)
+        public AuthenticationResult GetAuthToken(string tenantId, string clientId, string clientSecret)
         {
             try
             {
-                var authContext = new AuthenticationContext(string.Format("https://login.windows.net/{0}", tenantId));
+                var authContext = new AuthenticationContext($"https://login.windows.net/{tenantId}");
                 var credential = new ClientCredential(clientId, clientSecret);
 
                 //var result = authContext.AcquireTokenAsync(resource: "https://management.core.windows.net/{0}", clientCredential: credential);
@@ -62,7 +62,7 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
                 {
                     throw new InvalidOperationException("Failed to obtain the JWT token");
                 }
-                return result.AccessToken;
+                return result;
             }
             catch (Exception e)
             {

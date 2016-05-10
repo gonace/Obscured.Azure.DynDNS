@@ -5,6 +5,6 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
 {
     public interface INetwork
     {
-        List<Provider> GetIpAddress(string provider = "dyndns");
+        List<Provider> GetIpAddress();
     }
 }

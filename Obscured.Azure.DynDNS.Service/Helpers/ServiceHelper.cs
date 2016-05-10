@@ -33,7 +33,7 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             try
             {
                 IPAddress ipAddress;
-                var ipAddresses = _networkHelper.GetIpAddress(_settings.Providers);
+                var ipAddresses = _networkHelper.GetIpAddress();
                 result.Providers = ipAddresses;
                 _eventLogger.LogMessage(JsonConvert.SerializeObject(ipAddresses), EventLogEntryType.Information);
                 if (ipAddresses.Count > 1)

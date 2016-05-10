@@ -20,6 +20,8 @@ namespace Obscured.Azure.DynDNS.Service
             _serviceHelper = serviceHelper;
             _eventLogger = eventLogger;
 
+            var result = _serviceHelper.Check();
+
             InitializeComponent();
         }
 

@@ -15,5 +15,11 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
             var appSection = (AppSettingsSection)config.GetSection(section);
             return appSection.Settings[key].Value;
         }
+
+        public AppSettingsSection GetSection(string section)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            return (AppSettingsSection)config.GetSection(section);
+        }
     }
 }

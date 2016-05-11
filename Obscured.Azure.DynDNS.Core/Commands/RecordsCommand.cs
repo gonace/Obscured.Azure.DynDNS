@@ -19,8 +19,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public IList<Record> List()
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.RecordsUri, Method.GET);
             request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -37,8 +37,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public Record Get(string name, string type = "")
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.RecordUri, Method.GET);
             request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -57,8 +57,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public Record Create(Record record, string zoneName)
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.RecordUri, Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -83,8 +83,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public Record Update(Record record, string zoneName)
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.RecordUri, Method.PUT)
             {
@@ -119,8 +119,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public bool Remove(Record record)
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.RecordUri, Method.DELETE);
             request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);

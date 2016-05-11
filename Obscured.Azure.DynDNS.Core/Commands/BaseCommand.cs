@@ -24,7 +24,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             RestClient.BaseUrl = new System.Uri(Settings.Azure.BaseUri);
         }
 
-        protected static void ReAuthenticate()
+        protected static void RefreshToken()
         {
             AuthenticationResult = new AzureHelper(Settings).GetAuthToken(new AzureHelper(Settings).GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId,Settings.ClientSecret);
         }

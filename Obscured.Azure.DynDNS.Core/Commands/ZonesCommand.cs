@@ -18,8 +18,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public IList<Zone> List()
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.ZonesUri, Method.GET);
             request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -35,8 +35,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public Zone Get(string name)
         {
-            if (DateTimeOffset.UtcNow > AuthenticationResult.ExpiresOn)
-                ReAuthenticate();
+            if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
+                RefreshToken();
 
             var request = new RestRequest(Settings.Azure.ZoneUri, Method.GET);
             request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);

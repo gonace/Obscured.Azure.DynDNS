@@ -12,10 +12,12 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
     public class AzureHelper : IAzureHelper
     {
         private readonly ISettings _settings;
+        private readonly IEventLogger _eventLogger;
 
-        public AzureHelper(ISettings settings)
+        public AzureHelper(ISettings settings, IEventLogger eventLogger)
         {
             _settings = settings;
+            _eventLogger = eventLogger;
         }
 
         public string GetSubscriptionTenantId(string subscriptionId)
@@ -50,7 +52,7 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
         {
             try
             {
-                var authContext = new AuthenticationContext($"https://login.windows.net/{tenantId}");
+               /* var authContext = new AuthenticationContext($"https://login.windows.net/{tenantId}");
                 var credential = new ClientCredential(clientId, clientSecret);
 
                 //var result = authContext.AcquireTokenAsync(resource: "https://management.core.windows.net/{0}", clientCredential: credential);
@@ -62,7 +64,7 @@ namespace Obscured.Azure.DynDNS.Core.Helpers
                 {
                     throw new InvalidOperationException("Failed to obtain the JWT token");
                 }
-                return result;
+                return result;*/
             }
             catch (Exception e)
             {

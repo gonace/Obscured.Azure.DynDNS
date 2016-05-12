@@ -38,12 +38,12 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
                 _eventLogger.LogMessage(JsonConvert.SerializeObject(ipAddresses), EventLogEntryType.Information);
                 if (ipAddresses.Count > 1)
                 {
-                    ipAddress = IPAddress.Parse(ipAddresses.GroupBy(x => x.ReturnedAddress).OrderByDescending(ip => ip.Count()).First().First().ReturnedAddress.ToString());
+                    ipAddress = IPAddress.Parse(ipAddresses.GroupBy(x => x.ReturnedAddress).OrderByDescending(ip => ip.Count()).First().First().ReturnedAddress);
                     _eventLogger.LogMessage($"Used the most common response, which was: {ipAddress}", EventLogEntryType.Information);
                 }
                 else if (ipAddresses.Count == 1)
                 {
-                    ipAddress = IPAddress.Parse(ipAddresses.First().ReturnedAddress.ToString());
+                    ipAddress = IPAddress.Parse(ipAddresses.First().ReturnedAddress);
                     _eventLogger.LogMessage($"Used response from provider: {ipAddresses.First().Name}, which was: {ipAddress}", EventLogEntryType.Information);
                 }
                 else
@@ -77,8 +77,8 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             }
             catch (Exception ex)
             {
-                _eventLogger.LogMessage(ex.InnerException.ToString(), EventLogEntryType.Error);
-                result.Exception = ex.InnerException;
+                _eventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
+                result.Exception = ex;
                 return result;
             }
         }
@@ -97,7 +97,7 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             }
             catch (Exception ex)
             {
-                _eventLogger.LogMessage(ex.Message, EventLogEntryType.Error);
+                _eventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return false;
         }

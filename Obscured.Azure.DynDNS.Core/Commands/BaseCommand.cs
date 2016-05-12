@@ -12,21 +12,23 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         public static IRestClient RestClient;
         public static ISettings Settings;
         public static IEventLogger EventLogger;
+        public static IAzureHelper AzureHelper;
 
-        public BaseCommand(IRestClient restClient, ISettings settings, IEventLogger eventLogger)
+        public BaseCommand(IRestClient restClient, ISettings settings, IEventLogger eventLogger, IAzureHelper azureHelper)
         {
             Settings = settings;
             RestClient = restClient;
             EventLogger = eventLogger;
+            AzureHelper = azureHelper;
 
-            AuthenticationResult = new AzureHelper(Settings).GetAuthToken(new AzureHelper(Settings).GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+            AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
             RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
             RestClient.BaseUrl = new System.Uri(Settings.Azure.BaseUri);
         }
 
         protected static void RefreshToken()
         {
-            AuthenticationResult = new AzureHelper(Settings).GetAuthToken(new AzureHelper(Settings).GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId,Settings.ClientSecret);
+            AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId,Settings.ClientSecret);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Models;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using RestSharp;
@@ -12,8 +13,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 {
     public class ZonesCommand : BaseCommand, IZonesCommand
     {
-        public ZonesCommand(IRestClient restClient, ISettings settings, IEventLogger eventLogger)
-            : base(restClient, settings, eventLogger)
+        public ZonesCommand(IRestClient restClient, ISettings settings, IEventLogger eventLogger, IAzureHelper azureHelper)
+            : base(restClient, settings, eventLogger, azureHelper)
         {
         }
 

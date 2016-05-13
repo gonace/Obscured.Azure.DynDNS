@@ -2,7 +2,6 @@
 using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using RestSharp;
-using RestSharp.Authenticators;
 
 namespace Obscured.Azure.DynDNS.Core.Commands
 {
@@ -20,15 +19,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             RestClient = restClient;
             EventLogger = eventLogger;
             AzureHelper = azureHelper;
-
-            AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
-            RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
+            
             RestClient.BaseUrl = new System.Uri(Settings.Azure.BaseUri);
-        }
-
-        protected static void RefreshToken()
-        {
-            AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId,Settings.ClientSecret);
         }
     }
 }

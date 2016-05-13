@@ -8,6 +8,7 @@ using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Models;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace Obscured.Azure.DynDNS.Core.Commands
 {
@@ -22,8 +23,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.RecordsUri, Method.GET);
                 request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -34,7 +35,11 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<IList<Record>>(JObject.Parse(response.Content).GetValue("value").ToString());
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                var eventType = EventLogEntryType.Error;
+                if(response.StatusCode == HttpStatusCode.Forbidden|| response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
+
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {
@@ -47,8 +52,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.RecordUri, Method.GET);
                 request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -56,12 +61,17 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 request.AddUrlSegment("zoneName", Settings.ZoneName);
                 request.AddUrlSegment("recordType", type);
                 request.AddUrlSegment("recordSetName", name);
+                EventLogger.LogMessage(JsonConvert.SerializeObject(request), EventLogEntryType.Warning);
 
                 var response = RestClient.Execute(request);
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<Record>(response.Content);
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                var eventType = EventLogEntryType.Error;
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
+
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {
@@ -74,8 +84,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.RecordUri, Method.PUT) { RequestFormat = DataFormat.Json };
                 request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -94,7 +104,11 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<Record>(response.Content);
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                var eventType = EventLogEntryType.Error;
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
+
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {
@@ -107,8 +121,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.RecordUri, Method.PUT)
                 {
@@ -136,8 +150,12 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 var response = RestClient.Execute(request);
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<Record>(response.Content);
+                
+                var eventType = EventLogEntryType.Error;
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {
@@ -150,8 +168,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.RecordUri, Method.DELETE);
                 request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -164,7 +182,11 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 if (response.StatusCode == HttpStatusCode.OK)
                     return response.StatusCode == HttpStatusCode.OK;
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                var eventType = EventLogEntryType.Error;
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
+
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {

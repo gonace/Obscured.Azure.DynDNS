@@ -8,6 +8,7 @@ using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Models;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace Obscured.Azure.DynDNS.Core.Commands
 {
@@ -22,8 +23,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.ZonesUri, Method.GET);
                 request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -33,7 +34,11 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<IList<Zone>>(JObject.Parse(response.Content).GetValue("value").ToString());
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                var eventType = EventLogEntryType.Error;
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
+
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {
@@ -46,8 +51,8 @@ namespace Obscured.Azure.DynDNS.Core.Commands
         {
             try
             {
-                if (DateTimeOffset.UtcNow >= AuthenticationResult.ExpiresOn.Subtract(new TimeSpan(0, -10, 0)))
-                    RefreshToken();
+                AuthenticationResult = AzureHelper.GetAuthToken(AzureHelper.GetSubscriptionTenantId(Settings.SubscriptionId), Settings.ClientId, Settings.ClientSecret);
+                RestClient.Authenticator = new JwtAuthenticator(AuthenticationResult.AccessToken);
 
                 var request = new RestRequest(Settings.Azure.ZoneUri, Method.GET);
                 request.AddUrlSegment("subscriptionId", Settings.SubscriptionId);
@@ -58,7 +63,11 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<Zone>(response.Content);
 
-                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), EventLogEntryType.Error);
+                var eventType = EventLogEntryType.Error;
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                    eventType = EventLogEntryType.FailureAudit;
+
+                EventLogger.LogMessage(JObject.Parse(response.Content).ToString(), eventType);
             }
             catch (Exception ex)
             {

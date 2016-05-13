@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Mime;
 using System.ServiceProcess;
 using System.Timers;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace Obscured.Azure.DynDNS.Service
             _settings = settings;
             _serviceHelper = serviceHelper;
             _eventLogger = eventLogger;
-            
+
             InitializeComponent();
         }
 

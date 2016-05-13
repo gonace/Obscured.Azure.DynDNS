@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Mime;
 using System.ServiceProcess;
 using System.Timers;
+using Newtonsoft.Json;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using Obscured.Azure.DynDNS.Service.Helpers;
 
@@ -60,7 +62,7 @@ namespace Obscured.Azure.DynDNS.Service
             }
             catch (Exception ex)
             {
-                _eventLogger.LogMessage(ex.Message, EventLogEntryType.Error);
+                _eventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
         }
     }

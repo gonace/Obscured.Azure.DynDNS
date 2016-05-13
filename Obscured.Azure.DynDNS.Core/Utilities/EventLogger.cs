@@ -5,19 +5,18 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
     public class EventLogger : IEventLogger
     {
         private static EventLog _eventLog;
-        private static string _sourceName;
 
         public EventLogger(string sourceName)
         {
-            _sourceName = sourceName;
+            var sourceName1 = sourceName;
             _eventLog = new EventLog();
 
-            if (!EventLog.SourceExists(_sourceName))
+            if (!EventLog.SourceExists(sourceName1))
             {
-                EventLog.CreateEventSource(_sourceName, "Obscured");
+                EventLog.CreateEventSource(sourceName1, "Obscured");
             }
 
-            _eventLog.Source = _sourceName;
+            _eventLog.Source = sourceName1;
             _eventLog.Log = "Obscured";
         }
 

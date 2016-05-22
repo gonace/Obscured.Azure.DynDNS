@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Obscured.Azure.DynDNS.Core.Helpers;
 using Obscured.Azure.DynDNS.Core.Models;
+using System.Diagnostics;
 
 namespace Obscured.Azure.DynDNS.Core.Utilities
 {
@@ -11,6 +12,7 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
         private readonly IConfigHelper _configHelper;
 
         public AzureSettings Azure { get; set; }
+        public ObscuredSettings Obscured { get; set; }
         public List<Provider> Providers { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
@@ -49,6 +51,12 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
                 RecordUri = _configHelper.Get("RecordUri", "Azure")
             };
 
+            Obscured = new ObscuredSettings
+            {
+                LogLevel = (EventLogEntryType)Enum.Parse(typeof(EventLogEntryType), _configHelper.Get("LogLevel", "Obscured"), true),
+                LogName = _configHelper.Get("LogName", "Obscured")
+            };
+
             Providers = new List<Provider>();
             var providerSection = _configHelper.GetSection("Providers");
             foreach (KeyValueConfigurationElement provider in providerSection.Settings)
@@ -71,5 +79,11 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
         public string ZoneUri { get; set; }
         public string RecordsUri { get; set; }
         public string RecordUri { get; set; }
+    }
+
+    public class ObscuredSettings
+    {
+        public EventLogEntryType LogLevel { get; set; }
+        public string LogName { get; set; }
     }
 }

@@ -4,19 +4,21 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
 {
     public class EventLogger : IEventLogger
     {
-        private static EventLog _eventLog;
+        public static EventLog _eventLog;
+        public static ISettings _settings;
 
-        public EventLogger(string sourceName)
+        public EventLogger(ISettings settings)
         {
-            var sourceName1 = sourceName;
             _eventLog = new EventLog();
-
-            if (!EventLog.SourceExists(sourceName1))
+            _settings = settings;
+            var sourceName = _settings.Obscured.LogName;
+            
+            if (!EventLog.SourceExists(sourceName))
             {
-                EventLog.CreateEventSource(sourceName1, "Obscured");
+                EventLog.CreateEventSource(sourceName, "Obscured");
             }
 
-            _eventLog.Source = sourceName1;
+            _eventLog.Source = sourceName;
             _eventLog.Log = "Obscured";
         }
 
@@ -27,22 +29,31 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
 
         public void LogMessage(string message, EventLogEntryType type)
         {
-            _eventLog.WriteEntry(message, type);
+            if (IsEnabledFor(type))
+                _eventLog.WriteEntry(message, type);
         }
 
         public void LogMessage(string message, EventLogEntryType type, int eventID)
         {
-            _eventLog.WriteEntry(message, type, eventID);
+            if (IsEnabledFor(type))
+                _eventLog.WriteEntry(message, type, eventID);
         }
 
         public void LogMessage(string message, EventLogEntryType type, int eventID, short category)
         {
-            _eventLog.WriteEntry(message, type, eventID, category);
+            if (IsEnabledFor(type))
+                _eventLog.WriteEntry(message, type, eventID, category);
         }
 
         public void LogMessage(string message, EventLogEntryType type, int eventID, short category, byte[] rawData)
         {
-            _eventLog.WriteEntry(message, type, eventID, category, rawData);
+            if(IsEnabledFor(type))
+                _eventLog.WriteEntry(message, type, eventID, category, rawData);
+        }
+
+        private static bool IsEnabledFor(EventLogEntryType type)
+        {
+            return type <= _settings.Obscured.LogLevel;
         }
     }
 }

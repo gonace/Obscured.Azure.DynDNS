@@ -54,7 +54,8 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
             Obscured = new ObscuredSettings
             {
                 LogLevel = (EventLogEntryType)Enum.Parse(typeof(EventLogEntryType), _configHelper.Get("LogLevel", "Obscured"), true),
-                LogName = _configHelper.Get("LogName", "Obscured")
+                LogName = _configHelper.Get("LogName", "Obscured"),
+                RayGunApiKey = _configHelper.Get("RayGun.ApiKey", "Obscured")
             };
 
             Providers = new List<Provider>();
@@ -85,5 +86,6 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
     {
         public EventLogEntryType LogLevel { get; set; }
         public string LogName { get; set; }
+        public string RayGunApiKey { get; set; }
     }
 }

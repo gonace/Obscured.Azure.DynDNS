@@ -11,9 +11,9 @@ namespace Obscured.Azure.DynDNS.Service.Ninject
         {
             Bind<IConfigHelper>().To<ConfigHelper>().InTransientScope();
             Bind<IAzureHelper>().To<AzureHelper>().InTransientScope();
-            Bind<RegistryHelper>().To<RegistryHelper>().InTransientScope();
             Bind<IServiceHelper>().To<ServiceHelper>().InTransientScope();
             Bind<IRestClient>().To<RestClient>().InTransientScope();
+            Bind<RegistryHelper>().To<RegistryHelper>().InTransientScope();
         }
     }
 }

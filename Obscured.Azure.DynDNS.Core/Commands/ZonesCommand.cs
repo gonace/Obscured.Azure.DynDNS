@@ -42,6 +42,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -71,6 +72,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -78,17 +80,17 @@ namespace Obscured.Azure.DynDNS.Core.Commands
 
         public Zone Create(Zone zone)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Zone Update(Zone zone)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public bool Remove(Zone zone)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

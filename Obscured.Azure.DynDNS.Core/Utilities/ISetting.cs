@@ -6,6 +6,7 @@ namespace Obscured.Azure.DynDNS.Core.Utilities
     public interface ISettings
     {
         AzureSettings Azure { get; set; }
+        ObscuredSettings Obscured { get; set; }
         List<Provider> Providers { get; set; }
         string ClientId { get; set; }
         string ClientSecret { get; set; }

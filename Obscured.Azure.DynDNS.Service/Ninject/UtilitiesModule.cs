@@ -9,7 +9,7 @@ namespace Obscured.Azure.DynDNS.Service.Ninject
         {
             Bind<ISettings>().To<Settings>().InTransientScope();
             Bind<INetwork>().To<Network>().InTransientScope();
-            Bind<IEventLogger>().To<EventLogger>().InTransientScope().WithConstructorArgument("sourceName", "Azure.DynDNS");
+            Bind<IEventLogger>().To<EventLogger>().InTransientScope();
         }
     }
 }

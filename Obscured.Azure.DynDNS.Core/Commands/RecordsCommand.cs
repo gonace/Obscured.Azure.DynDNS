@@ -43,6 +43,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -75,6 +76,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -112,6 +114,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -159,6 +162,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -190,6 +194,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
+                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return false;

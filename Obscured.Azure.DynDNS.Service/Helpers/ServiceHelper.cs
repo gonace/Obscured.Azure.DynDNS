@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using Mindscape.Raygun4Net;
 using Newtonsoft.Json;
 using Obscured.Azure.DynDNS.Core.Commands;
 using Obscured.Azure.DynDNS.Core.Models.Records.Type;
@@ -11,6 +12,7 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
 {
     public class ServiceHelper : IServiceHelper
     {
+        private static RaygunClient _raygunClient;
         private static ISettings _settings;
         private static IEventLogger _eventLogger;
         private static INetwork _networkHelper;
@@ -24,6 +26,8 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             _networkHelper = network;
             _recordsCommand = recordsCommand;
             _zonesCommand = zonesCommand;
+
+            _raygunClient = new RaygunClient(_settings.Obscured.RayGunApiKey);
         }
 
         public Core.Models.Result Check()
@@ -77,6 +81,7 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             }
             catch (Exception ex)
             {
+                _raygunClient.Send(ex);
                 _eventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
                 result.Exception = ex;
                 return result;
@@ -97,6 +102,7 @@ namespace Obscured.Azure.DynDNS.Service.Helpers
             }
             catch (Exception ex)
             {
+                _raygunClient.Send(ex);
                 _eventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return false;

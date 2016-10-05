@@ -62,7 +62,6 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 request.AddUrlSegment("zoneName", Settings.ZoneName);
                 request.AddUrlSegment("recordType", type);
                 request.AddUrlSegment("recordSetName", name);
-                EventLogger.LogMessage(JsonConvert.SerializeObject(request), EventLogEntryType.Warning);
 
                 var response = RestClient.Execute(request);
                 if (response.StatusCode == HttpStatusCode.OK)

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Timers;
-using Mindscape.Raygun4Net;
 using Newtonsoft.Json;
 using Obscured.Azure.DynDNS.Core.Utilities;
 using Obscured.Azure.DynDNS.Service.Helpers;
@@ -11,7 +10,6 @@ namespace Obscured.Azure.DynDNS.Service
 {
     public partial class DynDns : ServiceBase
     {
-        private static RaygunClient _raygunClient;
         private static Timer _appTimer;
         private static ISettings _settings;
         private static IEventLogger _eventLogger;
@@ -22,7 +20,6 @@ namespace Obscured.Azure.DynDNS.Service
             _settings = settings;
             _serviceHelper = serviceHelper;
             _eventLogger = eventLogger;
-            _raygunClient = new RaygunClient(_settings.Obscured.RayGunApiKey);
 
             InitializeComponent();
 
@@ -66,7 +63,6 @@ namespace Obscured.Azure.DynDNS.Service
             }
             catch (Exception ex)
             {
-                _raygunClient.Send(ex);
                 _eventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
         }
@@ -74,7 +70,6 @@ namespace Obscured.Azure.DynDNS.Service
         #region Exception Handling
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            _raygunClient.Send(e.ExceptionObject as Exception);
         }
         #endregion
     }

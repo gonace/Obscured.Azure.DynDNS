@@ -34,6 +34,7 @@ Ankh.NoLoad
 *.css.map
 **/Modules/*.css
 **/Modules/*.css.map
+.vs/
 
 #Tooling
 _ReSharper*/

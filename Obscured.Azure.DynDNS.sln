@@ -1,20 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.Azure.DynDNS.Core", "Obscured.Azure.DynDNS.Core\Obscured.Azure.DynDNS.Core.csproj", "{5FE95D10-11B5-465F-9F86-939CF2F65BAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.Azure.DynDNS.Service", "Obscured.Azure.DynDNS.Service\Obscured.Azure.DynDNS.Service.csproj", "{F56A8A99-62F4-48A5-B97F-B591289E62C9}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AD5FAEEB-5437-4DFB-BEE5-372FA1D494F4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BF7ABB7E-4A5F-45D3-8C5B-84464B9BF283}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Obscured.Azure.DynDNS.Setup", "Obscured.Azure.DynDNS.Setup\Obscured.Azure.DynDNS.Setup.vdproj", "{3021D697-E615-48ED-B083-D5EDDABDF4F5}"
 EndProject
@@ -40,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BCBF115C-4592-4989-9A5F-196D84DE4E70}
 	EndGlobalSection
 EndGlobal

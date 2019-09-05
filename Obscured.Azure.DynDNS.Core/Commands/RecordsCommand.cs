@@ -43,7 +43,6 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
-                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -75,7 +74,6 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
-                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -113,7 +111,6 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
-                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -152,7 +149,7 @@ namespace Obscured.Azure.DynDNS.Core.Commands
                 var response = RestClient.Execute(request);
                 if (response.StatusCode == HttpStatusCode.OK)
                     return JsonConvert.DeserializeObject<Record>(response.Content);
-                
+
                 var eventType = EventLogEntryType.Error;
                 if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                     eventType = EventLogEntryType.FailureAudit;
@@ -161,7 +158,6 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
-                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return null;
@@ -193,7 +189,6 @@ namespace Obscured.Azure.DynDNS.Core.Commands
             }
             catch (Exception ex)
             {
-                RaygunClient.Send(ex);
                 EventLogger.LogMessage(JsonConvert.SerializeObject(ex), EventLogEntryType.Error);
             }
             return false;

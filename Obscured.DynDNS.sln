@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Obscured.DynDNS.Core", "Obscured.DynDNS.Core\Obscured.DynDNS.Core.csproj", "{5FE95D10-11B5-465F-9F86-939CF2F65BAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Obscured.DynDNS.Service", "Obscured.DynDNS.Service\Obscured.DynDNS.Service.csproj", "{F56A8A99-62F4-48A5-B97F-B591289E62C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4FE1D96D-982E-4B88-8C7B-231582F6DA45}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Obscured.DynDNS.Client", "Obscured.DynDNS.Client\Obscured.DynDNS.Client.csproj", "{06EF903B-A66D-461A-927C-408D9C318D09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{9A847857-FFA9-4804-AB33-12924A865843}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.DynDNS.Provider", "Obscured.DynDNS.Provider\Obscured.DynDNS.Provider.csproj", "{23AF20B3-37F1-4DE6-8807-23CE5C0BE7D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.DynDNS.Provider.Ipify", "Obscured.DynDNS.Provider.Ipify\Obscured.DynDNS.Provider.Ipify.csproj", "{AB33D38A-F47F-4121-8826-64601A9F8491}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.DynDNS.Provider.IPinfo", "Obscured.DynDNS.Provider.IPinfo\Obscured.DynDNS.Provider.IPinfo.csproj", "{406252EA-0BE0-45CC-ACFA-AF912E2CA787}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.DynDNS.Provider.MyExternalIP", "Obscured.DynDNS.Provider.MyExternalIP\Obscured.DynDNS.Provider.MyExternalIP.csproj", "{4A94C796-602F-496F-9053-2984B96A665A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obscured.DynDNS.Provider.MyIP", "Obscured.DynDNS.Provider.MyIP\Obscured.DynDNS.Provider.MyIP.csproj", "{B1DBA586-C5FD-41FA-A92C-1A6B05FB973F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FE95D10-11B5-465F-9F86-939CF2F65BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F56A8A99-62F4-48A5-B97F-B591289E62C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06EF903B-A66D-461A-927C-408D9C318D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06EF903B-A66D-461A-927C-408D9C318D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06EF903B-A66D-461A-927C-408D9C318D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06EF903B-A66D-461A-927C-408D9C318D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23AF20B3-37F1-4DE6-8807-23CE5C0BE7D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23AF20B3-37F1-4DE6-8807-23CE5C0BE7D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23AF20B3-37F1-4DE6-8807-23CE5C0BE7D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23AF20B3-37F1-4DE6-8807-23CE5C0BE7D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB33D38A-F47F-4121-8826-64601A9F8491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB33D38A-F47F-4121-8826-64601A9F8491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB33D38A-F47F-4121-8826-64601A9F8491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB33D38A-F47F-4121-8826-64601A9F8491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{406252EA-0BE0-45CC-ACFA-AF912E2CA787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{406252EA-0BE0-45CC-ACFA-AF912E2CA787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{406252EA-0BE0-45CC-ACFA-AF912E2CA787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{406252EA-0BE0-45CC-ACFA-AF912E2CA787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A94C796-602F-496F-9053-2984B96A665A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A94C796-602F-496F-9053-2984B96A665A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A94C796-602F-496F-9053-2984B96A665A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A94C796-602F-496F-9053-2984B96A665A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1DBA586-C5FD-41FA-A92C-1A6B05FB973F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1DBA586-C5FD-41FA-A92C-1A6B05FB973F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1DBA586-C5FD-41FA-A92C-1A6B05FB973F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1DBA586-C5FD-41FA-A92C-1A6B05FB973F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB33D38A-F47F-4121-8826-64601A9F8491} = {9A847857-FFA9-4804-AB33-12924A865843}
+		{406252EA-0BE0-45CC-ACFA-AF912E2CA787} = {9A847857-FFA9-4804-AB33-12924A865843}
+		{4A94C796-602F-496F-9053-2984B96A665A} = {9A847857-FFA9-4804-AB33-12924A865843}
+		{B1DBA586-C5FD-41FA-A92C-1A6B05FB973F} = {9A847857-FFA9-4804-AB33-12924A865843}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BCBF115C-4592-4989-9A5F-196D84DE4E70}
+	EndGlobalSection
+EndGlobal
